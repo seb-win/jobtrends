@@ -108,6 +108,29 @@ JSON_PAYLOAD = None     # TODO: Dict-Payload für POST-Requests, sonst None
 DATA        = None      # TODO: Form-Data für POST-Requests, sonst None
 
 # -----------------------------------------------------------------------
+# Detail-Request-Setup
+# Standardmäßig werden HEADERS/PARAMS vom Listenaufruf wiederverwendet.
+# Nur abweichende Werte eintragen – alles was None bleibt, fällt auf den
+# Listenwert zurück.
+# -----------------------------------------------------------------------
+
+# TODO: Separate Header für Detail-Requests, falls abweichend (sonst None)
+HEADERS_SINGLE: Optional[Dict[str, str]] = None
+# Beispiel:
+# HEADERS_SINGLE = {
+#     **HEADERS,
+#     "Accept": "application/json",
+# }
+
+# TODO: Separate Query-Parameter für Detail-Requests, falls abweichend (sonst None)
+PARAMS_SINGLE: Optional[Dict[str, Any]] = None
+# Beispiel:
+# PARAMS_SINGLE = {"lang": "de", "expand": "description"}
+
+JSON_PAYLOAD_SINGLE = None  # TODO: Dict-Payload für Detail-POST-Requests, sonst None
+DATA_SINGLE         = None  # TODO: Form-Data für Detail-POST-Requests, sonst None
+
+# -----------------------------------------------------------------------
 # JSON-Modus: Pfade in der API-Antwort
 # (nur relevant wenn RESPONSE_TYPE == "json")
 # -----------------------------------------------------------------------
@@ -419,10 +442,10 @@ def update_master_list_with_jobs(
             if detail_url:
                 response = fetch_url(
                     detail_url,
-                    headers=HEADERS,
-                    params=None,
-                    json=None,
-                    data=None,
+                    headers=HEADERS_SINGLE if HEADERS_SINGLE is not None else HEADERS,
+                    params=PARAMS_SINGLE,
+                    json=JSON_PAYLOAD_SINGLE,
+                    data=DATA_SINGLE,
                     use_proxy=USE_PROXY_DETAILED_POSTINGS,
                     max_retries=3,
                     timeout=10,
